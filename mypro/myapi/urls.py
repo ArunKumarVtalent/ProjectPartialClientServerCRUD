@@ -5,9 +5,9 @@ urlpatterns = [
     path('hello/', HelloView.as_view(), name='hello'),
     path('hello/<str:name>/', HelloView.as_view(), name='hello-with-id'),
     path('get-all-employees/', GetAllEmployee.as_view(), name='get-all-employees'),
-    path('get-employee-by-id/<int:employee_id>/', GetEmployeeById.as_view(), name='get-employee-by-id'),
+    path('get-employee-by-id/<int:empid>/', GetEmployeeById.as_view(), name='get-employee-by-id'),
     path('create-employee/', CreateEmployee.as_view(), name='create-employee'),
-    path('update-employee/<int:employee_id>/', UpdateEmployee.as_view(), name='update-employee'),
-    path('delete-employee/<int:employee_id>/', DeleteEmployee.as_view(), name='delete-employee'),
+    path('update-employee/<int:empid>/', UpdateEmployee.as_view(), name='update-employee'),
+    path('delete-employee/<int:empid>/', DeleteEmployee.as_view(), name='delete-employee'),
     path('get-all-departments/', GetAllDepartments.as_view(), name='get-all-departments'),
 ]

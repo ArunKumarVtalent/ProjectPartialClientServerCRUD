@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import connection
+from .models import Employee, Department
+from .serialization import EmployeeSerializer, DepartmentSerializer
 
 # Create your views here.
 class HelloView(APIView):
@@ -57,14 +59,22 @@ class HelloView(APIView):
 
 class GetAllEmployee(APIView):
     def get(self, request):
-        cursor = connection.cursor()
-        cursor.execute("SELECT * FROM employee")
-        employees = cursor.fetchall()
-        cursor.close()
-        return Response({"employees": employees}, status=status.HTTP_200_OK)
+       empList = Employee.objects.all()
+       if empList.exists():
+           serializer = EmployeeSerializer(empList, many=True)
+           return Response(serializer.data, status=status.HTTP_200_OK)
+       return Response("There are no employees available.", status=status.HTTP_404_NOT_FOUND)
 
 class GetEmployeeById(APIView):
-    pass
+    def get(self, request, empid):
+        try:
+            emp = Employee.objects.get(EmpId=empid)
+            if not emp:
+                return Response("Employee not found.", status=status.HTTP_404_NOT_FOUND)
+            serializer = EmployeeSerializer(emp)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Employee.DoesNotExist:
+            return Response("Employee not found.", status=status.HTTP_404_NOT_FOUND)
 
 class CreateEmployee(APIView):
     pass
@@ -76,4 +86,9 @@ class DeleteEmployee(APIView):
     pass
 
 class GetAllDepartments(APIView):
-    pass
+    def get(self, request):
+        deptList = Department.objects.all()
+        if deptList.exists():
+            serializer = DepartmentSerializer(deptList, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND)

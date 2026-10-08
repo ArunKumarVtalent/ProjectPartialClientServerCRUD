@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'mypro.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vtalentmaydb',
+        'NAME': 'mydb',
         'USER': 'root',
         'PASSWORD': 'password',
         'HOST': 'localhost',
