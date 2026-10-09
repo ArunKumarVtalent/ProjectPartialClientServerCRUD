@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HelloView, GetAllEmployee, GetEmployeeById, CreateEmployee, UpdateEmployee, DeleteEmployee, GetAllDepartments
+from .views import HelloView, GetAllEmployee, GetEmployeeById, CreateEmployee, UpdateEmployee, DeleteEmployee, GetAllDepartments, GetEmployeeByEmailPassword
 
 urlpatterns = [
     path('hello/', HelloView.as_view(), name='hello'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('update-employee/<int:empid>/', UpdateEmployee.as_view(), name='update-employee'),
     path('delete-employee/<int:empid>/', DeleteEmployee.as_view(), name='delete-employee'),
     path('get-all-departments/', GetAllDepartments.as_view(), name='get-all-departments'),
+    path('get-employee-by-email-and-password', GetEmployeeByEmailPassword.as_view(), name='get-employee-by-email-and-password'),
 ]

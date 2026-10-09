@@ -77,13 +77,35 @@ class GetEmployeeById(APIView):
             return Response("Employee not found.", status=status.HTTP_404_NOT_FOUND)
 
 class CreateEmployee(APIView):
-    pass
+    def post(self, request):
+        serializer = EmployeeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(f"Record created successfully.\n{serializer.data}", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateEmployee(APIView):
-    pass
+    def put(self, request, empid):
+        try:
+            emp = Employee.objects.get(EmpId=empid)
+            serializer = EmployeeSerializer(emp, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(f"Record updated successfully.\n{serializer.data}", status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Employee.DoesNotExist:
+            return Response("Employee not found.", status=status.HTTP_404_NOT_FOUND)
 
 class DeleteEmployee(APIView):
-    pass
+    def delete(self, request, empid):
+        try:
+            emp = Employee.objects.get(EmpId=empid)
+            if not emp:
+                return Response("Employee not found.", status=status.HTTP_404_NOT_FOUND)
+            emp.delete()
+            return Response(f"Record deleted successfully.", status=status.HTTP_200_OK)
+        except Employee.DoesNotExist:
+            return Response("Employee not found.", status=status.HTTP_404_NOT_FOUND)
 
 class GetAllDepartments(APIView):
     def get(self, request):
@@ -92,3 +114,16 @@ class GetAllDepartments(APIView):
             serializer = DepartmentSerializer(deptList, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+class GetEmployeeByEmailPassword(APIView):
+    def get(self, request):
+        email = request.query_params.get('email')
+        password = request.query_params.get('password')
+        try:
+            emp = Employee.objects.filter(Email=email, Password=password).first()
+            if not emp:
+                return Response("Employee not found.", status=status.HTTP_404_NOT_FOUND)
+            serializer = EmployeeSerializer(emp)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Employee.DoesNotExist:
+            return Response("Employee not found.", status=status.HTTP_404_NOT_FOUND)
