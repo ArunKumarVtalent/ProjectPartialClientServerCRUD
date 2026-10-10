@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}
 Home
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/create.js' %}"></script>
 {% endblock %}
 
 {% block content %}
